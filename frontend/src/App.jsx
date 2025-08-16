@@ -1,54 +1,86 @@
-import { useEffect } from 'react'
-import { Webchat, WebchatProvider, getClient } from '@botpress/webchat'
-import './app.css'
-
-const botId = '0b1c554e-bf61-45f0-9c52-2ffb8a4c424c'
-const clientId = 'c2232d34-dd63-42b4-8f64-390654e98fe6'
-const client = getClient({ botId, clientId })
+import { useEffect } from "react"
+import "./App.css"
 
 export default function App() {
-  useEffect(() => { /* nothing needed; mount only */ }, [])
+  useEffect(() => {
+    const script = document.createElement("script")
+    script.src = "https://cdn.botpress.cloud/webchat/v3.2/inject.js"
+    script.async = true
+    document.body.appendChild(script)
+
+    script.onload = () => {
+      window.botpress.init({
+        botId: "0b1c554e-bf61-45f0-9c52-2ffb8a4c424c",
+        clientId: "c2232d34-dd63-42b4-8f64-390654e98fe6",
+       
+        botName: "CodeMentor Pro",
+        botDescription:
+          "Your personal AI coding mentor. Learn, debug, and grow with guidance.",
+        themeMode: "dark",
+        color: "#3276EA",
+        variant: "solid",
+        headerVariant: "glass",
+        radius: 8,
+        selector: "#webchat",
+      })
+    }
+  }, [])
+
+  const sendMessage = (text) => {
+    if (window.botpress) {
+      window.botpress.sendEvent({
+        type: "proactive-trigger",
+        payload: { text },
+      })
+      window.botpress.open()
+    }
+  }
+
   return (
-    <div className="shell">
-      <aside className="sidebar">
+    <div className="layout">
+      {/* Sidebar */}
+      <div className="sidebar">
         <div className="logo">{`{ }`} CodeMentor Pro</div>
-        <div className="examples">
-          <button>Q1: Explain API in simple words</button>
-          <button>Q2: Connect PHP form to MySQL</button>
-          <button>Q3: What to include in my portfolio</button>
-          <button>Q4: Project idea: PHP + JavaScript</button>
-          <button>Q5: MySQL: Unknown column</button>
+        <div className="quick-examples">
+          <div className="example" onClick={() => sendMessage("Explain API in simple words")}>
+            Q1: Explain API in simple words
+          </div>
+          <div className="example" onClick={() => sendMessage("How to connect PHP form to MySQL?")}>
+            Q2: Connect PHP form to MySQL
+          </div>
+          <div className="example" onClick={() => sendMessage("What should I include in my portfolio?")}>
+            Q3: What to include in my portfolio
+          </div>
+          <div className="example" onClick={() => sendMessage("Give me a project idea with PHP + JavaScript")}>
+            Q4: Project idea: PHP + JavaScript
+          </div>
+          <div className="example" onClick={() => sendMessage("Fix MySQL error: Unknown column")}>
+            Q5: MySQL: Unknown column
+          </div>
         </div>
-        <div className="foot">© Built for students</div>
-      </aside>
+        <div className="sidebar-footer">
+          © CodeMentor Pro — Built for students
+        </div>
+      </div>
 
-      <main className="chat">
-        <header className="chat__head">💬 Chat with CodeMentor Pro</header>
-        <section className="chat__body">
-          <WebchatProvider
-            client={client}
-            configuration={{
-              themeMode: 'dark',
-              color: '#6366f1',
-              radius: 10,
-              botName: 'CodeMentor Pro',
-              botDescription: 'Overview → Steps → Code → Tips.'
-            }}
-          >
-            <div id="webchat" className="bp-container"><Webchat /></div>
-          </WebchatProvider>
-        </section>
-      </main>
+      {/* Chat Area */}
+      <div className="chat-area">
+        <div className="chat-header">Chat with CodeMentor Pro</div>
+        <div className="messages" id="webchat"></div>
+      </div>
 
-      <aside className="panel">
-        <div className="panel__head">Response details</div>
+      {/* Right Panel */}
+      <div className="details-panel">
+        <div className="details-header">Response details</div>
         <div className="tabs">
-          <span className="tab active">Steps</span>
-          <span className="tab">Code</span>
-          <span className="tab">Tips</span>
+          <div className="tab active">Steps</div>
+          <div className="tab">Code</div>
+          <div className="tab">Tips</div>
         </div>
-        <div className="panel__body">Answer format: Overview → Steps → Code → Tips.</div>
-      </aside>
+        <div className="tab-content" id="details-content">
+          Waiting for answer...
+        </div>
+      </div>
     </div>
   )
 }
