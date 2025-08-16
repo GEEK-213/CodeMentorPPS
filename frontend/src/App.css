@@ -10,8 +10,6 @@ html, body {
 }
 
 
-
-
 .layout {
   display: flex;
   height: 100vh;
@@ -71,14 +69,22 @@ html, body {
 
 .messages {
   flex: 1;
-  overflow: hidden;
+  min-height: 100%;   /* ensures iframe space */
   padding: 0;
+  overflow: hidden;
+  display: flex;
+}
+
+/* Force Botpress iframe to fill space */
+#webchat {
+  flex: 1;
+  display: flex;
 }
 
 #webchat .bpWebchat {
   width: 100% !important;
   height: 100% !important;
-  position: unset !important;
+  position: relative !important;
   border-radius: 0 !important;
 }
 
