@@ -8,22 +8,24 @@ export default function App() {
     script.async = true
     document.body.appendChild(script)
 
-    script.onload = () => {
-      console.log("✅ Botpress script loaded")
-      window.botpress.init({
-        botId: "0b1c554e-bf61-45f0-9c52-2ffb8a4c424c",
-        clientId: "c2232d34-dd63-42b4-8f64-390654e98fe6",
-        botName: "CodeMentor Pro",
-        botDescription:
-          "Your personal AI coding mentor. Learn, debug, and grow with guidance.",
-        themeMode: "dark",
-        color: "#3276EA",
-        variant: "solid",
-        headerVariant: "glass",
-        radius: 8,
-        selector: "#webchat", // injects inside this div
-      })
-    }
+ script.onload = () => {
+  console.log("✅ Botpress script loaded")
+  window.botpress.init({
+    botId: "0b1c554e-bf61-45f0-9c52-2ffb8a4c424c",
+    clientId: "c2232d34-dd63-42b4-8f64-390654e98fe6",
+    botName: "CodeMentor Pro",
+    botDescription: "Your personal AI coding mentor. Learn, debug, and grow with guidance.",
+    themeMode: "dark",
+    color: "#3276EA",
+    variant: "solid",
+    headerVariant: "glass",
+    radius: 8,
+    selector: "#webchat",
+    floating: false,             
+    showConversationsButton: false // 
+  })
+}
+
   }, [])
 
   const sendMessage = (text) => {
@@ -63,11 +65,12 @@ export default function App() {
         </div>
       </div>
 
-      {/* Chat Area */}
-      <div className="chat-area">
-        <div className="chat-header">Chat with CodeMentor Pro</div>
-        <div className="messages" id="webchat"></div>
-      </div>
+    <div className="chat-area">
+  <div className="chat-header">Chat with CodeMentor Pro</div>
+  <div className="messages">
+    <div id="webchat"></div>
+  </div>
+</div>
 
       {/* Right Panel */}
       <div className="details-panel">
