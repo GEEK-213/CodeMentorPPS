@@ -1,56 +1,105 @@
-import { useEffect } from "react"
+import { useEffect } from "react";
+import "./App.css";
 
 export default function App() {
   useEffect(() => {
-    const initBotpress = () => {
-      if (!window.botpressWebChat) {
-        console.warn("Botpress script not ready, retrying...")
-        setTimeout(initBotpress, 300) // retry after 300ms
-        return
-      }
+    const script = document.createElement("script");
+    script.src = "https://cdn.botpress.cloud/webchat/v3.2/inject.js";
+    script.async = true;
+    document.body.appendChild(script);
 
-      if (window.__BP_INITIALIZED__) return
+    script.onload = () => {
+      console.log("✅ Botpress script loaded");
+      window.botpress.init({
+        botId: "0b1c554e-bf61-45f0-9c52-2ffb8a4c424c",
+        clientId: "c2232d34-dd63-42b4-8f64-390654e98fe6",
+        botName: "CodeMentor Pro",
+        botDescription:
+          "Your personal AI coding mentor. Learn, debug, and grow with guidance.",
+        themeMode: "dark",
+        color: "#3276EA",
+        variant: "solid",
+        headerVariant: "glass",
+        radius: 8,
+        selector: "#webchat",
+        floating: false,                // force inline
+        showConversationsButton: false  // hide floating bubble
+      });
+    };
+  }, []);
 
-      window.botpressWebChat.init({
-        clientId: import.meta.env.VITE_BOTPRESS_CLIENT_ID,
-        botId: import.meta.env.VITE_BOTPRESS_BOT_ID,
-        theme: "prism",
-        themeColor: "#2563eb",
-        composerPlaceholder: "Type a message...",
-        container: "#webchat",
-        showWidget: false,
-        lazySocket: true,
-        useSessionStorage: true,
-      })
-
-      // open immediately
-      window.botpressWebChat.sendEvent({ type: "show" })
-
-      window.__BP_INITIALIZED__ = true
-      console.log("✅ Botpress initialized!")
+  const sendMessage = (text) => {
+    if (window.botpress) {
+      window.botpress.sendEvent({
+        type: "proactive-trigger",
+        payload: { text },
+      });
+      window.botpress.open();
     }
-
-    // inject script if not already there
-    if (!document.getElementById("bp-webchat-script")) {
-      const script = document.createElement("script")
-      script.id = "bp-webchat-script"
-      script.src = "https://cdn.botpress.cloud/webchat/v1/inject.js"
-      script.async = true
-      script.onload = initBotpress
-      document.body.appendChild(script)
-    } else {
-      initBotpress()
-    }
-  }, [])
+  };
 
   return (
-    <div style={{ height: "100vh", padding: "2rem", background: "#f5f5f5" }}>
-      <h1 style={{ marginBottom: "1rem" }}>Hello Botpress 👋</h1>
+    <div className="layout">
+      {/* Sidebar */}
+      <div className="sidebar">
+        <div className="logo">{`{ }`} CodeMentor Pro</div>
+        <div className="quick-examples">
+          <div
+            className="example"
+            onClick={() => sendMessage("Explain API in simple words")}
+          >
+            Q1: Explain API in simple words
+          </div>
+          <div
+            className="example"
+            onClick={() => sendMessage("How to connect PHP form to MySQL?")}
+          >
+            Q2: Connect PHP form to MySQL
+          </div>
+          <div
+            className="example"
+            onClick={() => sendMessage("What should I include in my portfolio?")}
+          >
+            Q3: What to include in my portfolio
+          </div>
+          <div
+            className="example"
+            onClick={() => sendMessage("Give me a project idea with PHP + JavaScript")}
+          >
+            Q4: Project idea: PHP + JavaScript
+          </div>
+          <div
+            className="example"
+            onClick={() => sendMessage("Fix MySQL error: Unknown column")}
+          >
+            Q5: MySQL: Unknown column
+          </div>
+        </div>
+        <div className="sidebar-footer">
+          © CodeMentor Pro — Built for students
+        </div>
+      </div>
 
-      <div
-        id="webchat"
-        style={{ height: "100%", width: "100%", position: "relative" }}
-      />
+      {/* Chat Area */}
+      <div className="chat-area">
+        <div className="chat-header">Chat with CodeMentor Pro</div>
+        <div className="messages">
+          <div id="webchat"></div>
+        </div>
+      </div>
+
+      {/* Right Panel */}
+      <div className="details-panel">
+        <div className="details-header">Response details</div>
+        <div className="tabs">
+          <div className="tab active">Steps</div>
+          <div className="tab">Code</div>
+          <div className="tab">Tips</div>
+        </div>
+        <div className="tab-content" id="details-content">
+          Waiting for answer...
+        </div>
+      </div>
     </div>
-  )
+  );
 }
