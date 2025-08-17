@@ -7,34 +7,25 @@ function App() {
     const script = document.createElement("script");
     script.src = "https://cdn.botpress.cloud/webchat/v3.2/inject.js";
     script.async = true;
-
     script.onload = () => {
-      const initChat = () => {
-        const container = document.querySelector("#webchat");
-        if (container && window.botpress) {
-          window.botpress.init({
-            botId: "0b1c554e-bf61-45f0-9c52-2ffb8a4c424c",
-            clientId: "c2232d34-dd63-42b4-8f64-390654e98fe6",
-            botName: "CodeMentor Pro",
-            botDescription: "Your personal AI coding mentor...",
-            themeMode: "dark",
-            color: "#3276EA",
-            variant: "solid",
-            headerVariant: "glass",
-            radius: 8,
-            selector: "#webchat",      // mount inline
-            floating: false,           // disable bubble
-            showConversationsButton: false
-          });
-        } else {
-          // retry until div exists
-          setTimeout(initChat, 100);
-        }
-      };
-
-      initChat();
+      window.botpress.init({
+        botId: "0b1c554e-bf61-45f0-9c52-2ffb8a4c424c",
+        clientId: "c2232d34-dd63-42b4-8f64-390654e98fe6",
+        botName: "CodeMentor Pro",
+        botDescription: "Your personal AI coding mentor...",
+        themeMode: "dark",
+        color: "#3276EA",
+        variant: "solid",
+        headerVariant: "glass",
+        radius: 8,
+        selector: "#webchat", // Mount inside our div
+        // Important
+        containerWidth: "100%",
+        containerHeight: "100%",
+        showConversationsButton: false,
+        enableConversationDeletion: false,
+      });
     };
-
     document.body.appendChild(script);
   }, []);
 
@@ -53,7 +44,7 @@ function App() {
 
       {/* Chat Area */}
       <main className="chat-area">
-        <div id="webchat"></div>
+        <div id="webchat" className="chat-container"></div>
       </main>
 
       {/* Right Panel */}
