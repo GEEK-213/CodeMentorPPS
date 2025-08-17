@@ -8,22 +8,24 @@ function App() {
     script.src = "https://cdn.botpress.cloud/webchat/v3.2/inject.js";
     script.async = true;
     script.onload = () => {
-      if (window.botpress) {
-        window.botpress.init({
-          botId: "0b1c554e-bf61-45f0-9c52-2ffb8a4c424c",
-          clientId: "c2232d34-dd63-42b4-8f64-390654e98fe6",
-          botName: "CodeMentor Pro",
-          botDescription: "Your personal AI coding mentor...",
-          themeMode: "dark",
-          color: "#3276EA",
-          variant: "solid",
-          headerVariant: "glass",
-          radius: 8,
-          selector: "#webchat",
-          floating: false,
-          showConversationsButton: false,
-        });
-      }
+      window.botpress.init({
+        botId: "0b1c554e-bf61-45f0-9c52-2ffb8a4c424c",
+        clientId: "c2232d34-dd63-42b4-8f64-390654e98fe6",
+        botName: "CodeMentor Pro",
+        botDescription: "Your personal AI coding mentor...",
+        themeMode: "dark",
+        color: "#3276EA",
+        variant: "solid",
+        headerVariant: "glass",
+        radius: 8,
+
+        // Embed mode (fixes floating widget issue)
+        container: "#webchat",
+        useSessionStorage: true,
+        showConversationsButton: false,
+        showCloseButton: false,
+        enableReset: false,
+      });
     };
     document.body.appendChild(script);
   }, []);
@@ -43,7 +45,8 @@ function App() {
 
       {/* Chat Area */}
       <main className="chat-area">
-        <div id="webchat"></div>
+        {/* Chat will embed directly here */}
+        <div id="webchat" style={{ width: "100%", height: "100%" }}></div>
       </main>
 
       {/* Right Panel */}
