@@ -1,67 +1,56 @@
-import { useEffect } from "react";
-import "./App.css";
+import { useEffect } from "react"
 
-function App() {
+export default function App() {
   useEffect(() => {
-    // Load Botpress script
-    const script = document.createElement("script");
-    script.src = "https://cdn.botpress.cloud/webchat/v3.2/inject.js";
-    script.async = true;
-    script.onload = () => {
-      window.botpress.init({
-        botId: "0b1c554e-bf61-45f0-9c52-2ffb8a4c424c",
-        clientId: "c2232d34-dd63-42b4-8f64-390654e98fe6",
-        botName: "CodeMentor Pro",
-        botDescription: "Your personal AI coding mentor...",
-        themeMode: "dark",
-        color: "#3276EA",
-        variant: "solid",
-        headerVariant: "glass",
-        radius: 8,
+    const initBotpress = () => {
+      if (!window.botpressWebChat) {
+        console.warn("Botpress script not ready, retrying...")
+        setTimeout(initBotpress, 300) // retry after 300ms
+        return
+      }
 
-        // Embed mode (fixes floating widget issue)
+      if (window.__BP_INITIALIZED__) return
+
+      window.botpressWebChat.init({
+        clientId: import.meta.env.VITE_BOTPRESS_CLIENT_ID,
+        botId: import.meta.env.VITE_BOTPRESS_BOT_ID,
+        theme: "prism",
+        themeColor: "#2563eb",
+        composerPlaceholder: "Type a message...",
         container: "#webchat",
+        showWidget: false,
+        lazySocket: true,
         useSessionStorage: true,
-        showConversationsButton: false,
-        showCloseButton: false,
-        enableReset: false,
-      });
-    };
-    document.body.appendChild(script);
-  }, []);
+      })
+
+      // open immediately
+      window.botpressWebChat.sendEvent({ type: "show" })
+
+      window.__BP_INITIALIZED__ = true
+      console.log("✅ Botpress initialized!")
+    }
+
+    // inject script if not already there
+    if (!document.getElementById("bp-webchat-script")) {
+      const script = document.createElement("script")
+      script.id = "bp-webchat-script"
+      script.src = "https://cdn.botpress.cloud/webchat/v1/inject.js"
+      script.async = true
+      script.onload = initBotpress
+      document.body.appendChild(script)
+    } else {
+      initBotpress()
+    }
+  }, [])
 
   return (
-    <div className="app">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <h2>Quick Prompts</h2>
-        <ul>
-          <li>Explain async/await</li>
-          <li>Fix my Express route</li>
-          <li>Write a React hook example</li>
-          <li>Help with MongoDB schema</li>
-        </ul>
-      </aside>
+    <div style={{ height: "100vh", padding: "2rem", background: "#f5f5f5" }}>
+      <h1 style={{ marginBottom: "1rem" }}>Hello Botpress 👋</h1>
 
-      {/* Chat Area */}
-      <main className="chat-area">
-        {/* Chat will embed directly here */}
-        <div id="webchat" style={{ width: "100%", height: "100%" }}></div>
-      </main>
-
-      {/* Right Panel */}
-      <aside className="details">
-        <div className="tabs">
-          <button className="active">Steps</button>
-          <button>Code</button>
-          <button>Tips</button>
-        </div>
-        <div className="panel-content">
-          <p>Select a tab to see details parsed from responses.</p>
-        </div>
-      </aside>
+      <div
+        id="webchat"
+        style={{ height: "100%", width: "100%", position: "relative" }}
+      />
     </div>
-  );
+  )
 }
-
-export default App;
