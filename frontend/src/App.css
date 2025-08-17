@@ -1,22 +1,27 @@
+body {
+  margin: 0;
+  background: #1e1e1e;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
 .app {
   display: flex;
   height: 100vh;
-  font-family: Arial, sans-serif;
-  background: #121212;
-  color: #fff;
 }
 
 /* Sidebar */
 .sidebar {
-  width: 260px;
-  padding: 1rem;
-  background: #1e1e1e;
+  width: 220px;
+  background: #111;
+  padding: 20px;
   border-right: 1px solid #333;
 }
 
 .sidebar h2 {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
+  margin-top: 0;
+  font-size: 18px;
+  margin-bottom: 15px;
 }
 
 .sidebar ul {
@@ -25,51 +30,35 @@
 }
 
 .sidebar li {
-  margin-bottom: 0.8rem;
+  margin: 10px 0;
   cursor: pointer;
-  transition: color 0.2s ease;
+  color: #ccc;
 }
 
 .sidebar li:hover {
-  color: #3276ea;
+  color: #3276EA;
 }
 
 /* Chat Area */
 .chat-area {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-  background: #121212;
+  justify-content: center;
+  align-items: stretch;
+  background: #1e1e1e;
 }
 
+/* This ensures Botpress chat takes full height/width */
 #webchat {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-#webchat iframe {
-  width: 100% !important;
-  height: 100% !important;
-  border: none !important;
-  flex: 1;
-  display: block;
-  position: relative !important;
-}
-
-/* Force-hide floating bubble */
-#webchat .bpFab,
-.bpFab {
-  display: none !important;
+  min-height: 100%;
+  width: 100%;
 }
 
 /* Right Panel */
 .details {
   width: 280px;
-  background: #1e1e1e;
+  background: #1a1a1a;
   border-left: 1px solid #333;
   display: flex;
   flex-direction: column;
@@ -77,82 +66,26 @@
 
 .tabs {
   display: flex;
+  background: #222;
   border-bottom: 1px solid #333;
 }
 
 .tabs button {
   flex: 1;
-  padding: 0.7rem;
-  background: transparent;
+  padding: 10px;
+  background: none;
   border: none;
-  color: #aaa;
+  color: #bbb;
   cursor: pointer;
 }
 
 .tabs button.active {
   color: #fff;
-  border-bottom: 2px solid #3276ea;
+  border-bottom: 2px solid #3276EA;
 }
 
 .panel-content {
+  padding: 15px;
   flex: 1;
-  padding: 1rem;
-  overflow-y: auto;
-}
-
-
-.app {
-  display: flex;
-  height: 100vh;
-  background-color: #1e1e1e;
-  color: white;
-}
-
-.sidebar {
-  width: 220px;
-  padding: 1rem;
-  background: #111;
-}
-
-.chat-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: #1e1e1e;
-}
-
-.chat-container {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-}
-
-.details {
-  width: 280px;
-  background: #111;
-  display: flex;
-  flex-direction: column;
-}
-
-.tabs {
-  display: flex;
-  background: #222;
-}
-
-.tabs button {
-  flex: 1;
-  padding: 0.5rem;
-  background: transparent;
-  border: none;
-  color: #aaa;
-  cursor: pointer;
-}
-
-.tabs button.active {
-  border-bottom: 2px solid #3276ea;
-  color: white;
-}
-
-.panel-content {
-  padding: 1rem;
+  color: #ccc;
 }
